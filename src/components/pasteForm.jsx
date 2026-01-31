@@ -16,18 +16,16 @@ function PasteForm() {
         },
         body: JSON.stringify({
           content: content,
-          ttlSeconds: Number(ttl),
-          maxViews: Number(views),
+          ttl_seconds: Number(ttl),   
+          max_views: Number(views),   //
         }),
       }
     );
 
     const data = await response.json();
 
-    //  backend returns ONLY id
-    const generatedUrl = `https://pastebin-lite-2-kioy.onrender.com/api/pastes/${data.id}`;
-
-    setResult(generatedUrl);
+    // backend already gives full URL
+    setResult(data.url);
   }
 
   return (
