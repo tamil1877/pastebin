@@ -1,26 +1,33 @@
 import { useState } from "react";
 
-function pasteForm() {
+function PasteForm() {
   const [content, setContent] = useState("");
   const [ttl, setTtl] = useState(300);
   const [views, setViews] = useState(1);
   const [result, setResult] = useState(null);
 
   async function createPaste() {
-    const response = await fetch("http://localhost:8080/api/pastes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        content: content,
-        ttl_seconds: Number(ttl),
-        max_views: Number(views)
-      })
-    });
+    const response = await fetch(
+      "https://pastebin-lite-2-kioy.onrender.com/api/pastes",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: content,
+          ttlSeconds: Number(ttl),
+          maxViews: Number(views),
+        }),
+      }
+    );
 
     const data = await response.json();
-    setResult(data);
+
+    //  backend returns ONLY id
+    const generatedUrl = `https://pastebin-lite-2-kioy.onrender.com/api/pastes/${data.id}`;
+
+    setResult(generatedUrl);
   }
 
   return (
@@ -51,8 +58,8 @@ function pasteForm() {
       {result && (
         <div className="result">
           <p>Shareable Link:</p>
-          <a href={result.url} target="_blank">
-            {result.url}
+          <a href={result} target="_blank" rel="noreferrer">
+            {result}
           </a>
         </div>
       )}
@@ -60,4 +67,4 @@ function pasteForm() {
   );
 }
 
-export default pasteForm;
+export default PasteForm;
